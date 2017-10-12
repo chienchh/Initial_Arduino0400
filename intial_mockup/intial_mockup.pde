@@ -156,14 +156,14 @@ public void Servo_input(String theText) {
   println("a textfield event for controller 'Servo_input' : "+theText);
   //NEED TO CHECK IF THE VALUES ARE VALID
   
-  myPort.write(theText);
-  //if(toggleFlag)
-  //  myPort.write("sa,"+theText);  
-  //else
-  //  {
-  //    if(Integer.parseInt(theText) >= 0 && Integer.parseInt(theText) <= 360)
-  //      myPort.write("ua,"+theText);
-  //  }
+  //myPort.write(theText);
+  if(toggleFlag)
+   myPort.write("sa,"+theText);  
+  else
+   {
+     if(Integer.parseInt(theText) >= 0 && Integer.parseInt(theText) <= 360)
+       myPort.write("ua,"+theText);
+   }
 }
 
 public void DC_pos_input(String theText) {

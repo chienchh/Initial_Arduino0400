@@ -21,9 +21,6 @@ int servoPotPinVal;
 
 
 
-
-
-
 //------------------------
 // STEPPER MOTOR PARAMTER START
 //------------------------
@@ -160,19 +157,33 @@ void setup() {
 
 }
 
+//int inputString ="";
+int val = 0;
+char s;
+char x;
 void loop() {
   // put your main code here, to run repeatedly:
   while (Serial.available() > 0)
   {
     int val = Serial.read();
+    //  inputString = serial.readString();
     Serial.println(val);
-    if (isDigit(val)){
+    s = val;
+    Serial.println("The char is");
+    Serial.println(s);
+    if (isDigit(val)) {
       input += (char)val;
-      Serial.print("input is : ");
-      Serial.println(input);
+//      Serial.print("input is : ");
+//      Serial.println(input);
     }
+
   }
-  char x = input.charAt(0);
+  x = input.charAt(0);
+  Serial.println("This is inpug : ");
+  Serial.println(input);
+  Serial.println("This is x : ");
+  Serial.println(x);
+  //  int x = val;
   if (x == 'u')
     String userval = input.substring(3);
   char ch = input.charAt(1);
@@ -182,17 +193,15 @@ void loop() {
       {
         //        _Servo(userval, x);
         //        break;
-          Serial.println("Servo Port");
-      
+        Serial.println("Servo Port");
+
 
       }
     case 'b':
       {
 
         Serial.println("DC Infrared Light Port");
-        // TODO: (refine logic) userval <= 1000: user control; userval > 1000: sensor control;
-        // TODO: (refine logic) user can specify controlled motor;
-        //      if (userval > 1000) {
+        //      if (x =='s') {
         //        sensorType = 'i'; // i stands for infra red; t stands for thermitor
         //        changeDCPosition(userval,'s',sensorType); // s stands for sensor runMode
         //      }
@@ -206,10 +215,7 @@ void loop() {
     case 'c':
       {
         Serial.println("DC Thermistor Port");
-        // TODO: (refine logic) userval <= 1000: user control; userval > 1000: sensor control;
-        // TODO: (refine logic) user can specify controlled motor;
-
-        //      if (userval > 1000) {
+        //      if (x == 's') {
         //        sensorType = 'i'; // i stands for infra red; t stands for thermitor
         //        changeDCSpeed(userval,'s',sensorType); // s stands for sensor runMode
         //      }
@@ -222,8 +228,14 @@ void loop() {
       {
 
         Serial.println("Stepper Port");
-        //      val = _Stepper();
-        //      break;
+        //        if (x == 'u') {
+        //          val = stepperUserInput(int targetAngle)
+        //        } else if(x == 's'){
+        //          val = stepperSlot();
+        //        } else{
+        //        stepperButton();
+        //        }
+
       }
   }
   //val = input.toInt();
@@ -279,16 +291,35 @@ void establishContact() {
 //------------------------
 
 
-void servoPot() {
+int servoPot() {
   servoPotPinVal = analogRead(servoPotPin);
   servoPotPinVal = map(servoPotPinVal, 0, 1023, 0, 180);
   myservo.write(servoPotPinVal);                  // sets the servo position according to the scaled value
   delay(15);                           // waits for the servo to get there
+  return servoPotPinVal;
+}
+
+
+int servoPotUserInput(int targetAngle) {
+  servoPotPinVal = analogRead(servoPotPin);
+  servoPotPinVal = map(servoPotPinVal, 0, 1023, 0, 180);
+  int angle = 0;
+  for ( angle = 0; angle < targetAngle; angle += 1)   // command to move from 0 degrees to 180 degrees
+  {
+    myservo.write(angle);                 //command to rotate the servo to the specified angle
+    delay(15);
+  }
+  delay(15);
+  return servoPotPinVal;
+
 }
 
 //------------------------
 // SERVO CONTROL END
 //------------------------
+
+
+
 
 
 
@@ -312,6 +343,20 @@ void stepperSlot() {
     Serial.println("Slot Open");
 
   } else if (stepperSlotState == 0) {
+    Serial.println("Slot Closed");
+    digitalWrite(stepperStepPin, HIGH);
+    delayMicroseconds(500);
+    digitalWrite(stepperStepPin, LOW);
+    delayMicroseconds(500);
+  }
+
+}
+
+void stepperUserInput(int targetAngle) {
+  stepperSlotState = digitalRead(stepperSlotPin);
+  //  Serial.println("Slot State");
+  //  Serial.println(stepperSlotState);
+  for (int i = 0; i < targetAngle; i++) {
     Serial.println("Slot Closed");
     digitalWrite(stepperStepPin, HIGH);
     delayMicroseconds(500);

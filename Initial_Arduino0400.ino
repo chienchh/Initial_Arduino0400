@@ -173,8 +173,8 @@ void loop() {
     Serial.println(s);
     if (isDigit(val)) {
       input += (char)val;
-//      Serial.print("input is : ");
-//      Serial.println(input);
+      //      Serial.print("input is : ");
+      //      Serial.println(input);
     }
 
   }
@@ -191,9 +191,14 @@ void loop() {
   {
     case 'a':
       {
-        //        _Servo(userval, x);
-        //        break;
         Serial.println("Servo Port");
+        //        Serial.println("Servo Port");
+        //        if (x == 's') {
+        //          servoPot();
+        //        } else {
+        //          servoPotUserInput(int targetAngle);
+        //        }
+        //        break;
 
 
       }
@@ -229,12 +234,13 @@ void loop() {
 
         Serial.println("Stepper Port");
         //        if (x == 'u') {
-        //          val = stepperUserInput(int targetAngle)
+        //          val = stepperUserInput(targetAngle)
         //        } else if(x == 's'){
         //          val = stepperSlot();
         //        } else{
         //        stepperButton();
         //        }
+        //        break;
 
       }
   }
